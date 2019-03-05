@@ -3,13 +3,13 @@ class VenuesController < ApplicationController
     @q = Venue.ransack(params.fetch("q", nil))
     @venues = @q.result(:distinct => true).includes(:bookmarks, :neighborhood, :fans, :specialties).page(params.fetch("page", nil)).per(10)
 
-    @location_hash = Gmaps4rails.build_markers(@venues.where.not(:address_latitude => nil)) do |venue, marker|
-      marker.lat venue.address_latitude
-      marker.lng venue.address_longitude
-      marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.created_at}</a></h5><small>#{venue.address_formatted_address}</small>"
-
-    end
-
+    # @location_hash = Gmaps4rails.build_markers(@venues.where.not(:address_latitude => nil)) do |venue, marker|
+    #   marker.lat venue.address_latitude
+    #   marker.lng venue.address_longitude
+    #   marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.created_at}</a></h5><small>#{venue.address_formatted_address}</small>"
+    #end
+    
+    @venues_bookmarked = current_user.bookmarked_venues
     render("venues_templates/index.html.erb")
   end
 
