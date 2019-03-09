@@ -1,6 +1,6 @@
 class VenuesController < ApplicationController
   def index
-    @q = Venue.ransack(params.fetch("q", nil))
+    @q = current_user.bookmarked_venues.ransack(params.fetch("q", nil))
     @venues = @q.result(:distinct => true).includes(:bookmarks, :neighborhood, :fans, :specialties).page(params.fetch("page", nil)).per(10)
 
     @location_hash = Gmaps4rails.build_markers(@venues.where.not(:address_latitude => nil)) do |venue, marker|
@@ -9,7 +9,7 @@ class VenuesController < ApplicationController
         marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.created_at}</a></h5><small>#{venue.address_formatted_address}</small>"
     end
     
-    @venues_bookmarked = current_user.bookmarked_venues
+    #@venues_bookmarked = @venues.joins(:bookmarks).where("bookmarks.user_id = ?", current_user.id).uniq
     render("venues_templates/index.html.erb")
   end
 
