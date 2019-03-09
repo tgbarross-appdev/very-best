@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="row mt-2 mb-1">
     <div class="col-md-3">
-      <%= search_form_for @q do |f| %>
+      <%= search_form_for @q, class:"collapse", id:"venues_filters" do |f| %>
         <p class="lead">Narrow results:</p>
       
         <div class="form-group">
@@ -40,7 +40,7 @@
           <div id="location_map" style="height: 360px;"></div>
         </div>
         <ul class="list-group list-group-flush">
-          <%@venues_bookmarked.each do |venue|%>
+          <%@venues.each do |venue|%>
             <li class="list-group-item">
               <a href="/venues/<%=venue.id%>">
                 <%=venue.name%>
